@@ -35,6 +35,7 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
     });
   }
 
+
   // Lit reactive properties
   static get properties() {
     return {
@@ -66,10 +67,12 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
   // Lit render the HTML
   render() {
     return html`
-      <div class="wrapper">
-        <h3>${this.title}</h3>
-        <slot></slot>
-      </div>`;
+    <details open>
+      <summary>Search inputs</summary>
+      <div>
+        <input id="input" placeholder="Search" @input="${this.inputChanged}" />
+      </div>
+    </details>`
   }
 
   /**
