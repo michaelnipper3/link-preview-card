@@ -21,11 +21,17 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
   constructor() {
     super();
     this.title = "";
+    this.webLink = "";
+    this.description = "";
+    this.imageLink = "";
+    this.loading = false;
+
     this.t = this.t || {};
     this.t = {
       ...this.t,
       title: "Title",
     };
+    
     this.registerLocalization({
       context: this,
       localesPath:
@@ -41,8 +47,12 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
     return {
       ...super.properties,
       title: { type: String },
+      webLink: { type: String, attribute: "web-link" },
+      description: { type: String },
+      imageLink: { type: String, attribute: "image-link" },
     };
   }
+
 
   // Lit scoped styles
   static get styles() {
