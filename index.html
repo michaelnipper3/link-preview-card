@@ -5,28 +5,32 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
     <meta name="Description" content="Demonstration for link-preview-card" />
 
     <style>
       :root,
       html,
       body {
-        margin: 0;
-        padding: 0;
+        margin: var(--ddd-spacing-0);
+        padding: var(--ddd-spacing-0);
       }
       #demo {
         margin: var(--ddd-spacing-2);
       }
       link-preview-card {
-        margin: var(--ddd-spacing-2);
-        border: var(--ddd-border-md);
+        margin: var(--ddd-spacing-20);
+        border: var(--ddd-border-lg);
         border-radius: var(--ddd-radius-lg);
       }
       link-preview-card:hover {
         box-shadow: var(--ddd-boxShadow-sm);
       }
+      h1,h2{
+        margin: auto;
+        text-align: center;
+        color: var(--ddd-theme-default-creekTeal);
+      }      
     </style>
     <title>link-preview-card</title>
   </head>
@@ -34,16 +38,13 @@
   <body>
     <div id="demo">
       <h1>link-preview-card</h1>
-      <h2>Search inputs</h2>
-      <div>
-        <input id="input" placeholder="Search" @input="${this.inputChanged}" />
-      </div>
-      <link-preview-card web-link="https://www.linkedin.com"></link-preview-card>
-      <link-preview-card web-link="https://www.espn.com"></link-preview-card>
-      <link-preview-card web-link="https://www.imdb.com"></link-preview-card>
-      <link-preview-card web-link="https://www.yahoo.com"></link-preview-card>
-      <link-preview-card web-link="https://www.github.com"></link-preview-card>
-    </div>
+      <link-preview-card id="search-card"></link-preview-card>
+      <link-preview-card id="search-card" web-link="https://www.disneyplus.com"></link-preview-card>
+      <link-preview-card id="search-card" web-link="https://www.imdb.com"></link-preview-card>
+      <link-preview-card id="search-card" web-link="https://www.yahoo.com"></link-preview-card>
+      <link-preview-card id="search-card" web-link="https://www.linkedin.com"></link-preview-card>
+      <link-preview-card id="search-card" web-link="https://www.espn.com"></link-preview-card>
+
     <script type="module" src="./link-preview-card.js"></script>
   </body>
 </html>

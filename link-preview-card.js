@@ -2,6 +2,7 @@
  * Copyright 2025 mwn5286
  * @license Apache-2.0, see LICENSE for full text.
  */
+
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
@@ -12,8 +13,8 @@ import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
  * @demo index.html
  * @element link-preview-card
  */
-export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
 
+export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
   static get tag() {
     return "link-preview-card";
   }
@@ -21,7 +22,7 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
   constructor() {
     super();
     this.title = "";
-    this.webLink = "";
+    this.webLink = "https://apple.com";
     this.description = "";
     this.imageLink = "";
     this.loading = false;
@@ -41,8 +42,6 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
     });
   }
 
-
-  // Lit reactive properties
   static get properties() {
     return {
       ...super.properties,
@@ -50,27 +49,21 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
       webLink: { type: String, attribute: "web-link" },
       description: { type: String },
       imageLink: { type: String, attribute: "image-link" },
+      loading: { type: Boolean },
     };
   }
 
-
-  // Lit scoped styles
   static get styles() {
     return [
       super.styles,
       css`
         :host {
           display: block;
-          color: var(--ddd-theme-primary);
-          background-color: var(--ddd-theme-accent);
-          font-family: var(--ddd-font-navigation);
+          color: var(--ddd-primary-2);
+          background-color: var(--ddd-theme-default-creekTeal);
+          font-family: var(--ddd-font-secondary);
         }
         .wrapper {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
           margin: var(--ddd-spacing-2);
           padding: var(--ddd-spacing-4);
         }
@@ -80,12 +73,87 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
             var(--ddd-font-size-s)
           );
         }
-        img {
+        #myimage {
           display: block;
-          max-width: 400px;
-          max-height: 400px;
+          max-width: 200px;
+          max-height: 200px;
           height: auto;
           margin: var(--ddd-spacing-2);
+        }
+        .intro {
+          align-items: start;
+          text-align: center;
+          margin: var(--ddd-spacing-2);
+          padding: var(--ddd-spacing-2);
+          width: var(--ddd-breakpoint-md);
+        }
+
+        .card-content {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        }
+
+        .link-search {
+          margin-left: auto;
+          margin-right: auto;
+          display: block;
+          text-align: center;
+        }
+
+        h1,h2,h3,h4,h5,h6 {
+          margin: auto;
+          padding: var(--ddd-spacing-2);
+        }
+
+        @media (max-width: 620px) {
+        .wrapper {
+          max-width: 600px;
+          flex-wrap: nowrap;
+        }
+        .card-content {
+          flex-direction: column;
+          align-items: center;
+        }
+        .intro {
+          max-width: 300px;
+        }
+
+        .loader {
+          width: 50px;
+          aspect-ratio: 1;
+          display: grid;
+          -webkit-mask: conic-gradient(from 15deg, #0000, #000);
+          mask: conic-gradient(from 15deg, #0000, #000);
+          animation: l26 1s infinite steps(12);
+        }
+
+        .loader,.loader:before,.loader:after {
+          background: radial-gradient(
+                closest-side at 50% 12.5%,
+                #f03355 96%,
+                #0000
+              )
+              50% 0/20% 80% repeat-y,
+            radial-gradient(closest-side at 12.5% 50%, #f03355 96%, #0000) 0 50%/80%
+              20% repeat-x;
+        }
+
+        .loader:before,.loader:after {
+          content: "";
+          grid-area: 1/1;
+          transform: rotate(30deg);
+        }
+
+        .loader:after {
+          transform: rotate(60deg);
+        }
+
+        @keyframes l26 {
+          100% {
+            transform: rotate(1turn);
+          }
         }
       `,
     ];
@@ -93,55 +161,82 @@ export class LinkPreviewCard extends DDDSuper(I18NMixin(LitElement)) {
 
   // Lit render the HTML
   render() {
-    return html` 
-    <div class="wrapper">
-      <p><a href="${this.webLink}" target="_blank">${this.webLink}</a></p>
-      <h3>${this.title}</h3>
-      <p>${this.description}</p>
-      <img
-        src="${this.imageLink}"
-        alt="${this.t.title}: ${this.title}"
-        loading="lazy"
-        width="100%"
-      />
-      <slot></slot>
-    </div>`;
+    return html`
+      <div class="wrapper">
+        ${this.loading
+          ? html`<div class="loader"></div>` // Show loader when loading is true
+          : html`
+              <div class="card-content">
+                <img
+                  id="myimage"
+                  src="${this.imageLink}"
+                  alt="${this.t.title}: ${this.title}"
+                  loading="lazy"
+                  width="100%"
+                />
+                <div class="intro">
+                  <div class="link-search">
+                    <input
+                      id="input"
+                      placeholder="Search"
+                      @keydown=${this.inputChanged}/>
+                    <button id="search" @click="${this.inputChanged}">Search</button>
+                  </div>
+                  <h3>${this.title}</h3>
+                  <p>${this.description}</p>
+                  <p><br><a href="${this.webLink}" target="_blank">${this.webLink}</a></p>
+                </div>
+              </div>
+            `}
+        <slot></slot>
+      </div>
+    `;
+  }
+
+  inputChanged(e) {
+    const inputValue = this.shadowRoot.querySelector("#input").value.trim();
+    if ((e.type === "click" || e.key === "Enter") && !inputValue.startsWith("https:")) {
+      alert("Please enter a valid URL starting with https:.");
+    } else if (e.type === "click" || e.key === "Enter") {
+      this.webLink = inputValue;
+      this.loading = true;
+    }
   }
 
   updated(changedProperties) {
     if (changedProperties.has("webLink")) {
       this.updateResults();
     }
+    setTimeout(() => {
+      console.log("Delayed for 5 seconds.");
+      this.loading = false;
+    }, 5000);
   }
 
-  updateResults(value) {
-    this.loading = true;
-    fetch(
-      `https://corsproxy.io/?url=https://open-apis.hax.cloud/api/services/website/metadata?q=${this.webLink}`
-    )
-      .then((d) => (d.ok ? d.json() : {}))
-      .then((response) => {
-        if (response.data["og:title"]) {
-          this.title = response.data["og:title"];
-        }
+  // https://corsproxy.io/?url=
+  async updateResults() {
+    try {
+      const response = await fetch(`https://open-apis.hax.cloud/api/services/website/metadata?q=${this.webLink}`);
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
+      }
 
-        if (response.data["og:description"]) {
-          this.description = response.data["og:description"];
-        }
+      const responseData = await response.json();
+      this.title = responseData.data?.["og:title"] || responseData.data?.title || "Error: No title found";
+      this.description = responseData.data?.["og:description"] || responseData.data?.description || "Error: No description found";
+      this.imageLink = responseData.data?.["og:image"] || responseData.data?.["ld+json"]?.logo || responseData.data?.["ld+json"]?.publisher?.logo || "";
 
-        if (response.data["description"]) {
-          this.description = response.data["description"];
-        }
-
-        if (response.data["og:image"]) {
-          this.imageLink = response.data["og:image"];
-        } else if (response.data["ld+json"].logo) {
-          this.imageLink = response.data["ld+json"].logo;
-        } else if (response.data["og:title"]) {
-          this.imageLink = response.data["ld+json"]["publisher"].logo;
-        }
-      });
+      if (!this.imageLink) {
+        this.imageLink = "jfjfjfjdj";
+        this.shadowRoot.querySelector("#myimage").removeAttribute("src");
+      }
+    } catch (error) {
+      console.error("Error fetching metadata:", error);
+    } finally {
+      this.loading = false;
+    }
   }
+
   /**
    * haxProperties integration via file reference
    */
